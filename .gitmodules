@@ -1,0 +1,27 @@
+[submodule "src/third_party/spdlog"]
+	path = src/third_party/spdlog
+	url = https://github.com/gabime/spdlog.git
+[submodule "src/third_party/fmt"]
+	path = src/third_party/fmt
+	url = https://github.com/fmtlib/fmt.git
+[submodule "src/third_party/argparse"]
+	path = src/third_party/argparse
+	url = https://github.com/p-ranav/argparse.git
+[submodule "src/third_party/duckdb"]
+	path = src/third_party/duckdb
+	url = https://github.com/duckdb/duckdb.git
+[submodule "src/third_party/json"]
+	path = src/third_party/json
+	url = https://github.com/nlohmann/json.git
+[submodule "src/third_party/uWebSockets"]
+	path = src/third_party/uWebSockets
+	url = https://github.com/uNetworking/uWebSockets.git
+[submodule "src/third_party/soci"]
+	path = src/third_party/soci
+	url = https://github.com/SOCI/soci.git
+[submodule "src/third_party/xframe"]
+	path = src/third_party/xframe
+	url = https://github.com/xtensor-stack/xframe.git
+[submodule "src/third_party/lz4"]
+	path = src/third_party/lz4
+	url = https://github.com/lz4/lz4.git
