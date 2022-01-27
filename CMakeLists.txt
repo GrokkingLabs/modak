@@ -19,9 +19,11 @@ include_directories(/usr/local/include)
 include_directories(src/main/)
 include_directories(src/main/include)
 include_directories(src/third_party/)
+include_directories(src/third_party/duckdb_a)
 include_directories(src/third_party/uWebSockets/src/)
 include_directories(src/third_party/uWebSockets/uSockets/src)
 include_directories(src/third_party/lz4/lib/)
+include_directories(src/third_party/argparse/include)
 
 add_compile_definitions(LIBUS_NO_SSL)
 add_compile_definitions(UWS_NO_ZLIB)
@@ -49,6 +51,13 @@ file(GLOB
   UWEBSOCKETS
   "src/third_party/uWebSockets/src/*.h"
   "src/third_party/uWebSockets/src/f2/function2.hpp"
+  )
+
+file(GLOB
+  DUCKDB
+  "src/third_party/duckdb_a/duckdb.cpp"
+  "src/third_party/duckdb_a/duckdb.hpp"
+  "src/third_party/duckdb_a/duckdb.h"
   )
 
 file(GLOB
@@ -83,6 +92,12 @@ file(
   )
 
 file(
+  GLOB_RECURSE
+  ARGPARSE
+  "src/third_party/argparse/include/argparse.hpp"
+  )
+
+file(
   GLOB
   CODE_SOURCES
   "src/main/src/main/*.hpp"
@@ -98,6 +113,8 @@ set(JSON_Install OFF CACHE INTERNAL "")
 add_subdirectory(src/third_party/json/)
 add_subdirectory(src/third_party/fmt)
 add_subdirectory(src/third_party/spdlog)
+#add_subdirectory(src/third_party/duckdb)
+#add_subdirectory(src/third_party/soci)
 find_package(Threads REQUIRED)
 
 add_executable(${PROJECT_NAME}
@@ -108,15 +125,20 @@ add_executable(${PROJECT_NAME}
   ${CODE_SOURCES}
   ${LZ4_SOURCES}
   ${BOOST}
+  ${ARGPARSE}
+  ${DUCKDB}
   main.cpp
   )
 link_directories(/usr/local/lib/)
 find_library(USOCKET_LIB uSockets.a /usr/local/lib/)
+#find_library(DUCKDB_LIB libduckdb_static.a /usr/local/lib/)
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
-#    LINK_DIRECTORIES(/usr/lib/x86_64-linux-gnu/)
-#    TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT} dl)
-    target_link_options(${PROJECT_NAME} PRIVATE -static-libgcc -static-libstdc++)
+    target_link_options(${PROJECT_NAME} PRIVATE
+      -static-libgcc
+      -static-libstdc++
+      )
 endif()
+
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
         spdlog::spdlog
@@ -124,6 +146,7 @@ target_link_libraries(${PROJECT_NAME}
         nlohmann_json::nlohmann_json
         pthread
         ${USOCKET_LIB}
+#        ${DUCKDB_LIB}
         )
 
 add_compile_options(-O3 -v)
